@@ -1,0 +1,123 @@
+﻿{extend name='public/base'/}
+
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<!--<div class="Hui-article">-->
+<!--<article class="cl pd-20">-->
+    <!--<form action="" method="post" class="form form-horizontal" id="form-admin-edit">-->
+        <!--<div class="row cl">-->
+            <!--<label class="form-label col-xs-4 col-sm-3">工号：</label>-->
+            <!--<div class="formControls col-xs-8 col-sm-9">-->
+                <!--<label style="margin-top:3px;">{$user_info.adminId}</label>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row cl">-->
+            <!--<label class="form-label col-xs-4 col-sm-3">姓名：</label>-->
+            <!--<div class="formControls col-xs-8 col-sm-9">-->
+                <!--<label style="margin-top:3px;">{$user_info.userName}</label>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row cl">-->
+            <!--<label class="form-label col-xs-4 col-sm-3">身份：</label>-->
+            <!--<div class="formControls col-xs-8 col-sm-9">-->
+                <!--<label style="margin-top:3px;">-->
+                    <!--{if condition="$user_info.role eq 3"}-->
+                    <!--超级管理员-->
+                    <!--{else /}-->
+                    <!--管理员-->
+                    <!--{/if}-->
+                <!--</label>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</form>-->
+<!--</article>-->
+<!--</div>-->
+
+
+<div class="Hui-article">
+    <article class="cl pd-20">
+        <table class="table table-border table-bordered radius" style="width:700px;">
+            <tbody class="text-c">
+            <tr>
+                <th class="active">工号</th>
+                <td colspan="2">{$user_info.adminId}</td>
+            </tr>
+            <tr><th class="active">姓名</th><td>{$user_info.userName}</td></tr>
+            <tr>
+                <th class="active">学号</th>
+                <td>
+                    <div class="row cl">
+                    <div class="formControls">
+                        <label style="margin-top:3px;">
+                            {if condition="$user_info.role eq 3"}
+                            超级管理员
+                            {else /}
+                            管理员
+                            {/if}
+                        </label>
+                    </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </article>
+    <footer class="footer">
+        <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+    </footer>
+</div>
+    {/block}
+
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+
+    $(function () {
+
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+        $("#submit").on("click", function (event) {
+            $.ajax({
+                type: "POST",
+                url: "{:url('admin/editUser')}",
+                data: $("#form-admin-edit").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    parent.window.location.reload();
+
+                }
+            });
+
+        })
+
+        //给登录按钮添加点击事件
+        $("#passwd_eye").on('click', function (event) {
+            var showpsd = $("#password");
+            if (showpsd.attr("type") == 'text') {
+                showpsd.prop('type', 'password');
+            } else {
+                showpsd.prop('type', 'text');
+            }
+
+        })
+
+
+    })
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,114 @@
+{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+{/block}
+{block name="content"}
+<!--<section class="Hui-article-box">-->
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    综测和奖惩
+    <span class="c-gray en">&gt;</span>
+    综合测试 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+
+<div class="Hui-article">
+
+    <article class="cl pd-20">
+        <div class="panel panel-primary radius">
+            <div class="panel-header">&nbsp;&nbsp;&nbsp;&nbsp;综测成绩-学生：{$name}</div>
+            <div class="panel-body">
+                <table class="table table-border table-bordered table-bg table-striped radius">
+                    <thead>
+                    <tr>
+                        <th scope="col" colspan="17">信息列表</th>
+                    </tr>
+                    <tr class="text-c">
+                        <th width="180">学号</th>
+                        <th width="80">姓名</th>
+                        <th width="250">课程学习综合分</th>
+                        <th width="250">操行综合分</th>
+                        <th width="250">体艺综合分</th>
+                        <th width="250">职业技能综合分</th>
+                        <th width="250">总综合分</th>
+                    </tr>
+                    </thead>
+                    <?php
+                        $zScore = 0;
+                        $tScore = 0;
+                        $zSubNum = 1;
+                        $tSubNum = 1;
+                        $score = 0;
+                    ?>
+                    <tbody>
+                    {foreach $list as $svo}
+                    <?php
+                        if($svo['coursePlat']=='Z' or $svo['coursePlat']=='K'){
+                            if($svo['coursePro']=='B'){
+                                $zScore = $zScore + $svo['examSco'];
+                                $zSubNum+=1;
+                            }
+                        }elseif($svo['coursePlat']=='T' or $svo['coursePlat']=='S'){
+                            if($svo['coursePro']=='B'){
+                                $tScore = $tScore + $svo['examSco'];
+                                $tSubNum+=1;
+                            }
+                        }
+                    ?>
+                    {/foreach}
+
+                    <tr class="text-c">
+                        <td>{$stuId}</td>
+                        <td>{$name}</td>
+                        <td>
+                            <?php
+                                        if($zSubNum != 1){
+                                            $zSubNum-= 1;
+                                        }
+                                        if($tSubNum!= 1){
+                                            $tSubNum-= 1;
+                                        }
+                                        echo $score = (($zScore/$zSubNum)*$evalCon['majorRate'] + ($tScore/$tSubNum)*$evalCon['publicRate'])*$evalCon['totalRate'];
+                                    ?>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </article>
+    <footer class="footer">
+        <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+    </footer>
+</div>
+<!--</section>-->
+{/block}
+
+{block name="js"}
+<script>
+
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+        ]
+    });
+
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

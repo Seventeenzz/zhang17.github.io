@@ -1,0 +1,101 @@
+{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+{block name="content"}
+<article class="cl pd-20">
+    <form action="" method="post" class="form form-horizontal" id="form-award-check">
+        <input hidden="hidden" type="text" name="id" id="id" value="{$awCheck.id}">
+    <table class="table table-border table-bordered table-bg table-striped radius">
+        <thead>
+        <tr class="text-c">
+            <th width="250">奖项名称</th><td>{$awCheck.award}</td>
+        </tr>
+        <tr class="text-c">
+            <th width="250">奖项证明</th>
+            <td>
+            <div class="formControls col-xs-8 col-sm-9" style="text-align: center">
+                {if condition="$awCheck.awardProve eq null"}
+                <img style="width:50%;margin-left: 25%" src="/uploads/system\dateNull.png">
+                {else /}
+                <img style="width:50%;margin-left: 25%"  src="{$awCheck.awardProve}">
+                {/if}
+            </div>
+            </td>
+        </tr>
+        <tr class="text-c">
+            <th width="250">奖项类型</th><td>{$awCheck.awardType}</td>
+        </tr>
+        <tr class="text-c">
+            <th width="250">状态</th>
+            <td>
+                {if condition="$awCheck.status gt 0"}
+                <span class="select-box" style="width:40%;">
+                <select class="select" name="status" size="1">
+                    <option value="1" selected>待审核</option>
+                    <option value="0">通过</option>
+                    <option value="2">不通过</option>
+                </select>
+                </span>
+                {else /}通过
+                {/if}
+            </td>
+        </tr>
+        <tr class="text-c">
+            <th width="250">得加分</th>
+            <td>
+                {if condition="$awCheck.status eq 0"}
+                {$awCheck.score}
+                {else /}
+                <input type="text" class="input-text" style="width: 40%;" value="" id="score" name="score">
+                {/if}
+            </td>
+            </tr>
+        </thead>
+    </table>
+        <div class="row cl">
+            <div class="col-sm-offset-1">
+                <input class="btn btn-primary radius disabled" style="margin-left: 40%;margin-top: 5%;" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="submit">
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+
+{block name="js"}
+<script>
+    $(function () {
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+        $("#submit").on("click", function (event) {
+            var formdata=new FormData($("#form-award-check")[0]);
+            $.ajax({
+                type: "POST",
+                url: "{:url('adstusco/awardCheckSave')}",
+                data: formdata,// $("#form-student-edit").serialize(),
+                async : false,
+                cache : false,
+                contentType : false,
+                processData : false,
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    }else{
+                        alert(data.message);
+                    }
+                    parent.window.location.reload();
+                }
+            });
+        })
+    });
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

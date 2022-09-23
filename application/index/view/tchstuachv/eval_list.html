@@ -1,0 +1,127 @@
+{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+{/block}
+{block name="content"}
+<!--<section class="Hui-article-box">-->
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    综合测评
+    <span class="c-gray en">&gt;</span>
+    学生测评 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+
+<div class="Hui-article">
+    <article class="cl pd-20">
+        <table class="table table-border table-bordered table-bg table-striped table-sort radius">
+            <thead>
+            <tr>
+                <th scope="col" colspan="17">信息列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="180">学号</th>
+                <th width="80">姓名</th>
+                <th width="80">班级</th>
+                <th width="250">课程学习综合分</th>
+                <th width="250">操行综合分</th>
+                <th width="250">体艺综合分</th>
+                <th width="250">职业技能综合分</th>
+                <th width="250">总综合分</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="stuList" id="vo"}
+
+            <?php
+                    $zScore = array();
+                    $zScore['$vo.studentId'] = 0;
+                    $tScore = array();
+                    $tScore['$vo.studentId'] = 0;
+                    $zSubNum = array();
+                    $zSubNum['$vo.studentId']=1;
+                    $tSubNum = array();
+                    $tSubNum['$vo.studentId']=1;
+                    $score = array();
+                    $score['$vo.studentId'] = 0;
+                ?>
+
+            <tr class="text-c">
+                <td>{$vo.studentId}</td>
+
+                {foreach $stuScoList as $svo}
+                <?php
+                        if($svo['studentId'] == $vo['studentId']){
+                            if($svo['coursePlat']=='Z' or $svo['coursePlat']=='K'){
+                                if($svo['coursePro']=='B'){
+                                    $zScore['$vo.studentId'] = $zScore['$vo.studentId'] + $svo['examSco'];
+                                    $zSubNum['$vo.studentId']+=1;
+                                }
+                            }elseif($svo['coursePlat']=='T' or $svo['coursePlat']=='S'){
+                                if($svo['coursePro']=='B'){
+                                    $tScore['$vo.studentId'] = $tScore['$vo.studentId'] + $svo['examSco'];
+                                    $tSubNum['$vo.studentId']+=1;
+                                }
+                            }
+                        }
+                    ?>
+                {/foreach}
+
+                <td>{$vo.userName}</td>
+                <td>{$gradeList[$vo.cid]['yid']}{$gradeList[$vo.cid]['gradeName']}</td>
+                <td>
+                    <?php
+                            if($zSubNum['$vo.studentId'] != 1){
+                                $zSubNum['$vo.studentId']-= 1;
+                            }
+                            if($tSubNum['$vo.studentId'] != 1){
+                                $tSubNum['$vo.studentId']-= 1;
+                            }
+                            echo $score['$vo.studentId'] = (($zScore['$vo.studentId']/$zSubNum['$vo.studentId'])*$evalCon['majorRate'] + ($tScore['$vo.studentId']/$tSubNum['$vo.studentId'])*$evalCon['publicRate'])*$evalCon['totalRate'];
+                        ?>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+    </article>
+    <footer class="footer">
+        <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+    </footer>
+</div>
+<!--</section>-->
+{/block}
+
+{block name="js"}
+<script>
+
+    /*管理员-导入*/
+    function imp_achv(title, url, w, h) {
+        $.get(url);
+        layer_show(title, url, w, h);
+    }
+
+
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+        ]
+    });
+
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

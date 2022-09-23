@@ -1,0 +1,198 @@
+﻿{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+<style>
+    /*分页*/
+    .pagination {
+    }
+
+        .pagination li {
+            display: inline-block;
+            margin-right: -1px;
+            padding: 5px;
+            border: 1px solid #e2e2e2;
+            min-width: 20px;
+            text-align: center;
+        }
+
+            .pagination li.active {
+                background: #009688;
+                color: #fff;
+                border: 1px solid #009688;
+            }
+
+            .pagination li a {
+                display: block;
+                text-align: center;
+            }
+</style>
+</head>
+<body>
+    {/block}
+    {block name="content"}
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+            <span class="c-gray en">&gt;</span>
+            专业与班级
+            <span class="c-gray en">&gt;</span>
+            班级列表<span class="c-gray en">&gt;</span>{$clsName}<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+        </nav>
+
+        <div class="Hui-article">
+            <article class="cl pd-20">
+                <div class="cl pd-5 bg-1 bk-gray mt-20" style="margin-bottom:30px;">
+                    <span class="r">
+                        <a href="{:url('Admajorgd/gradeList')}" class="btn btn-secondary radius">
+                            <i class="Hui-iconfont">&#xe6d4;</i>返回上一级
+                        </a>
+                    </span>
+                </div>
+
+                <table id="table" class="table table-border table-bordered table-bg table-hover table-sort radius">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="14">信息列表</th>
+                        </tr>
+                        <tr class="text-c">
+                            <th width="80">学号</th>
+                            <th width="60">姓名</th>
+                            <th width="30">角色</th>
+                            <th width="40">头像</th>
+                            <th width="50">民族</th>
+                            <th width="50">政治面貌</th>
+                            <th width="100">联系电话</th>
+                            <th width="150">专业</th>
+                            <th width="80">是否已启用</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name="list" id="vo"}
+                        <tr class="text-c">
+                            <td>{$vo.studentId}</td>
+                            <td>{$vo.userName}</td>
+                            <td>学生</td>
+                            <td>
+                                {if condition="$vo.picture eq null"}
+                                <img style="width:48px;height:48px;" src="/uploads/system\dateNull.png">
+                                {else /}
+                                <img style="width:48px;height:48px;" src="{$vo.picture}">
+                                {/if}
+                            </td>
+                            <td>{$vo.nation}</td>
+                            <td>{$vo.polity}</td>
+                            <td>{$vo.contact}</td>
+                            <td>{$vo.mor}</td>
+                            <td class="td-status">
+                                {if condition="$vo.status eq 1"}
+                                <span class="label label-success radius">已启用</span>
+                                {else /}
+                                <span class="label-default radius">已禁用</span>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+
+
+                </table>
+
+            </article>
+            <footer class="footer">
+                <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+            </footer>
+        </div>
+    {/block}
+
+    {block name="js"}
+    <script>
+
+        /*学生-停用*/
+        function student_stop(obj, id) {
+            layer.confirm('确认要停用吗？', function (index) {
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.get("{:url('admin/setStatus')}", { role: 0, id: id });
+                $(obj).parents("tr").find(".td-manage").prepend('<a onClick="studnet_start(this,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+                $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
+                $(obj).remove();
+                layer.msg('已停用!', { icon: 5, time: 1000 });
+                window.location.reload();
+            });
+        }
+
+        /*学生-启用*/
+        function student_start(obj, id) {
+            layer.confirm('确认要启用吗？', function (index) {
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.get("{:url('admin/setStatus')}", { role: 0, id: id });
+                $(obj).parents("tr").find(".td-manage").prepend('<a onClick="student_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+                $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+                $(obj).remove();
+                layer.msg('已启用!', { icon: 6, time: 1000 });
+                window.location.reload();
+            });
+        }
+
+        /*学生-编辑*/
+        function student_edit(title, url, w, h) {
+            $.get(url);
+            layer_show(title, url, w, h);
+        }
+
+        /*学生-添加*/
+        function student_add(title, url, w, h) {
+            $.get(url);
+            layer_show(title, url, w, h);
+        }
+
+        /*学生-删除*/
+        function student_del(obj, id) {
+            layer.confirm('确认删除吗？', function (index) {
+                $.get("{:url('admin/deleteStudentUser')}", { id: id });
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!', { icon: 1, time: 1000 });
+            });
+        }
+        $('.table-sort').dataTable({
+            "aaSorting": [[1, "desc"]],//默认第几个排序
+            "bStateSave": true,//状态保存
+            "aoColumnDefs": [
+                //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+                { "orderable": false, "aTargets": [0, 4] }// 制定列不参与排序
+            ]
+        });
+        /*学生-批量删除*/
+        function stu_batch_dete(obj) {
+            layer.confirm('确认要删除吗？', function (index) {
+                var data = [];
+                $("#table").find(":checkbox:checked").each(function () {
+                    var val = $(this).parent().next().text();
+                    data.push(val);
+                });
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.ajax({
+                    type: "POST",
+                    url: "{:url('admin/batchDStu')}",
+                    data: { data: data },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status == 1) {
+                            layer.msg(data.message, { icon: 5, time: 2000 });
+                        } else {
+                            layer.msg(data.message, { icon: 5, time: 2000 });
+                        }
+
+
+                    }
+                });
+
+
+            });
+        }
+    </script>
+    {/block}
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

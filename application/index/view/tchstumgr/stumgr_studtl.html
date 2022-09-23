@@ -1,0 +1,83 @@
+﻿{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<article class="cl pd-20">
+    <table class="table table-border table-bordered radius">
+        <tbody>
+            <tr><th class="active">学号</th><td>{$user_info.studentId}</td><th class="active">姓名</th><td>{$user_info.userName}</td></tr>
+            <tr>
+                <th class="active">照片</th>
+                <td>
+                    {if condition="$user_info.picture eq null"}
+                    <img style="width:60px;height:60px;" src="/uploads/system\dateNull.png">
+                    {else /}
+                    <img style="width:60px;height:60px;" src="{$user_info.picture}">
+                    {/if}
+                </td>
+                <th class="active">性别</th>
+                <td>{$user_info.gender=='0' ? '男' :'女'}</td>
+            </tr>
+            <tr><th class="active">民族</th><td>{$user_info.nation}</td><th class="active">籍贯</th><td>{$user_info.birthPlace}</td></tr>
+            <tr><th class="active">政治面貌</th><td>{$user_info.polity}</td><th class="active">专业</th><td>{$user_info.major}</td></tr>
+            <tr><th class="active">身份证号</th><td>{$user_info.identity}</td><th class="active">联系电话</th><td>{$user_info.contact}</td></tr>
+            <tr rowspan="2"><th class="active">家庭住址</th><td>{$user_info.address}</td><th class="active">email</th><td>{$user_info.email}</td></tr>
+        </tbody>
+    </table>
+</article>
+{/block}
+
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+
+    $(function () {
+
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+        $("#submit").on("click", function (event) {
+            $.ajax({
+                type: "POST",
+                url: "{:url('admin/editStudent')}",
+                data: $("#form-student-edit").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    parent.window.location.reload();
+
+                }
+            });
+
+        })
+
+        //给登录按钮添加点击事件
+        $("#passwd_eye").on('click', function (event) {
+            var showpsd = $("#password");
+            if (showpsd.attr("type") == 'text') {
+                showpsd.prop('type', 'password');
+            } else {
+                showpsd.prop('type', 'text');
+            }
+
+        })
+
+
+    })
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

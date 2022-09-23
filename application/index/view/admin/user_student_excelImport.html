@@ -1,0 +1,84 @@
+﻿{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<article class="cl pd-20">
+    <div class="panel panel-primary radius">
+        <div class="panel-header">批量添加学生-导入Excel表格</div>
+        <div class="panel-body">
+            <form action="{:url('admin/excelAddStudent')}" enctype="multipart/form-data" method="post" class="form form-horizontal" id="form-excel-add">
+                <table class="table table-border table-bordered table-bg">
+                    <thead>
+                        <tr>
+                            <th colspan="2" scope="col">
+                                <span class="l">
+                                    表格示例：
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                        </tr>
+                        <tr>
+                            <th>201512700139</th>
+                            <th>吴波</th>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-border table-bordered table-bg" style="margin-top: 20px;">
+                    <tbody>
+                        <tr>
+                            <th style="text-align: center">
+                                请选择要上传的班级
+                            </th>
+                            <th>
+                                <span class="select-box">
+                                    <select class="select" name="cid" size="1">
+                                        {volist name="$gradeList" id="glist"}
+                                        <option value={$glist.cid}>{$glist.class}</option>
+                                        {/volist}
+                                    </select>
+                                </span>
+
+                            </th>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                <div class="cl pd-5 mt-20">
+                    <span class="l">
+                        <span class="btn-upload form-group">
+                            <input class="input-text upload-url radius" type="text" name="uploadfile-1" id="uploadfile-1" readonly><a href="javascript:void();" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+                            <input type="file" multiple name="excel" class="input-file">
+                        </span>
+                    </span>
+                    <span class="r">
+                        <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="submit">
+                    </span>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    
+</article>
+    {/block}
+
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,129 @@
+﻿{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<article class="cl pd-20">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-edit">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>工号：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text disabled" value="{$user_info.adminId}" placeholder="" id="adminId" name="adminId">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>新密码：</label>
+            <div class="formControls col-xs-8 col-sm-9 skin-minimal userbox">
+                <input id="password" name="password" type="password" value="{$user_info.password}" class="input-text" autocomplete="off" placeholder="密码为6-11位">
+                <i class="Hui-iconfont user-icon" id="passwd_eye">&#xe725;</i>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {if condition="$Think.session.user_info.role eq 3"}
+                {if condition="$user_info.role eq 3"}
+                <input type="text" class="input-text disabled" value="{$user_info.userName}" placeholder="" id="userName" name="userName">
+                {else /}
+                <input type="text" class="input-text" value="{$user_info.userName}" placeholder="" id="userName" name="userName">
+                {/if}
+                {else /}
+                <input type="text" class="input-text disabled" value="{$user_info.userName}" placeholder="" id="userName" name="userName">
+                {/if}
+            </div>
+        </div>
+
+        {eq name="$Think.session.user_info.role" value="3"}
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">启用状态：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box" style="width:100px">
+                    <select class="select" size="1" name="status">
+                        <option value="0" {$user_info.status=='0' ? 'selected' :''}>停用</option>
+                        <option value="1" {$user_info.status=='1' ? 'selected' :''}>启用</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+        {/eq}
+
+        {eq name="$Think.session.user_info.role" value="3"}
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">角色：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box" style="width:100px">
+                    <select class="select" size="1" name="role">
+                        <option value="2" {$user_info.role=='2' ? 'selected' :''}>管理员</option>
+                        <option value="3" {$user_info.role=='3' ? 'selected' :''}>超级管理员</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+        {/eq}
+
+        <!--将当前记录的id做为隐藏域发送到服务器-->
+        <input type="hidden" value="{$user_info.id}" name="id">
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius disabled" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="submit">
+            </div>
+        </div>
+    </form>
+</article>
+    {/block}
+
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+
+    $(function () {
+
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+        $("#submit").on("click", function (event) {
+            $.ajax({
+                type: "POST",
+                url: "{:url('admin/editUser')}",
+                data: $("#form-admin-edit").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    parent.window.location.reload(); 
+                   
+                }
+            });
+
+        })
+
+        //给登录按钮添加点击事件
+        $("#passwd_eye").on('click', function (event) {
+            var showpsd = $("#password");
+            if (showpsd.attr("type") == 'text') {
+                showpsd.prop('type', 'password');
+            } else {
+                 showpsd.prop('type', 'text');
+            }
+            
+        })
+
+
+    })
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

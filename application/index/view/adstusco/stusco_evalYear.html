@@ -1,0 +1,78 @@
+{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+{/block}
+{block name="content"}
+<!--<section class="Hui-article-box">-->
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    学生测评
+    <span class="c-gray en">&gt;</span>
+    综合学年
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<?php $yearNum = 4; ?>
+<div class="Hui-article">
+
+    <ul id="Huifold1" class="Huifold">
+
+    {volist name="evalYear" id="years"}
+        <?php
+            $date = explode('-',$years);
+        ?>
+
+        <li class="item">
+            <h4>{$years}<b>+</b></h4>
+            <div class="info">
+                {volist name="yidlist" id="yvo"}
+                {if condition="($yvo.yid > $date[1]-$yearNum) and ($yvo.yid<$date[1])"}
+                <div class="panel panel-primary">
+                    <div class="panel-header">{$yvo.yid}级</div>
+                    <div class="panel-body" style="height:110px;">
+                        {volist name="gradelist" id="gvo"}
+                        {eq name="$gvo.yid" value="$yvo.yid"}
+                        <div class="grid-demo" style=" float:left;background:rgba(235, 225, 225, 0.3); height:90px;text-align:center;width:100px;margin-left:20px;margin-top:10px;">
+                            <a href="{:url('adstusco/evaluate',["cid"=>$gvo["cid"],"classInfo"=>$gvo["yid"]."级".$gvo["gradeName"],"evalDate"=>$years])}" style="text-decoration:none">
+                            <i class="Hui-iconfont" style="font-size: 50px;">&#xe67f;</i>
+                            <h4 style="margin-top:-20px;">{$gvo.gradeName}</h4>
+                            </a>
+                        </div>
+                        {/eq}
+                        {/volist}
+                    </div>
+                </div>
+                {/if}
+                {/volist}
+            </div>
+        </li>
+        <?php $yearNum-=1;?>
+    {/volist}
+    </ul>
+
+    <footer class="footer"></footer>
+</div>
+<!--</section>-->
+{/block}
+
+{block name="js"}
+<script>
+    $("#Huifold1").Huifold({
+        titCell:'.item h4',
+        mainCell:'.item .info',
+        type:2,
+        trigger:'click',
+        className:"selected",
+        speed:"first",
+    });
+
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

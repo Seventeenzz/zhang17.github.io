@@ -1,0 +1,168 @@
+﻿{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<article class="cl pd-20">
+    <form action="" method="post" class="form form-horizontal" id="form-student-edit" enctype="multipart/form-data">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>学号：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text disabled" value="{$user_info.studentId}">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text disabled" value="{$user_info.userName}">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">头像：</label>
+            <div class="formControls col-xs-4 col-sm-4">
+                {if condition="$user_info.picture eq null"}
+                <img id="backimg" style="width:240px;height:320px;" src="/uploads/system\dateNull.png">
+                {else /}
+                <img id="backimg" style="width:240px;height:320px;" src="{$user_info.picture}">
+                {/if}
+            </div>
+            <div class="formControls col-xs-4 col-sm-5">
+                <label><h6>上传说明：</h6>&nbsp;&nbsp;&nbsp;&nbsp;请上传图像要求为高320（像素）*宽240（像素）的蓝底免冠证件照，要求jpg格式，大小不得超过2MB。</label><br>
+                <span class="btn-upload">
+                    <a href="javascript:void();" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 浏览照片</a>
+                    <input type="file" multiple class="input-file" id="image" name="image" onchange="reads(this)">
+                </span>
+            </div>
+        </div>
+        
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">性别：</label>
+            <div class="formControls col-xs-8 col-sm-9" style="margin-top:3px;">
+                <input type="radio" name="gender" value="0" {$user_info.gender=='0' ? 'checked' :''}>男
+                <input type="radio" style="margin-left:30px;" name="gender" value="1" {$user_info.gender=='1' ? 'checked' :''}>女
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">民族：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info.nation}" placeholder="" id="nt" name="nt">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">籍贯：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info.birthPlace}" placeholder="" id="bp" name="bp">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">政治面貌：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info.polity}" placeholder="" id="py" name="py">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">专业：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info.mid}" placeholder="" id="major" name="major">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">联系电话：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info.contact}" placeholder="" id="ct" name="ct">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">身份证号：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info.identity}" placeholder="" id="iy" name="iy">
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">email：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="email" class="input-text" placeholder="@" name="em" id="em" value="{$user_info.email}">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">家庭住址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" style="OVERFLOW:visible" class="input-text" value="{$user_info.address}" placeholder="" id="address" name="address">
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius disabled" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="submit">
+            </div>
+        </div>
+    </form>
+</article>
+    {/block}
+
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+
+    $(function () {
+
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+        $("#submit").on("click", function (event) {
+            var formdata=new FormData($("#form-student-edit")[0]);
+            $.ajax({
+                type: "POST",
+                url: "{:url('index/editStudent')}",
+                data: formdata,// $("#form-student-edit").serialize(),
+                async : false,
+                cache : false,
+                contentType : false,
+                processData : false,
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    parent.window.location.reload(); 
+                   
+                }
+            });
+
+        })
+
+
+    })
+
+    function reads(obj) {
+     var file = obj.files[0];
+     var reader = new  FileReader();
+     reader.readAsDataURL(file);
+     reader.onload = function (ev) {
+         $("#backimg").attr("src", ev.target.result);
+     }
+  }
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

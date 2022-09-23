@@ -1,0 +1,92 @@
+﻿{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+    {/block}
+    {block name="content"}
+    <!--<section class="Hui-article-box">-->
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+            <span class="c-gray en">&gt;</span>
+            学生管理
+            <span class="c-gray en">&gt;</span>
+            学生列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+        </nav>
+
+        <div class="Hui-article">
+            <article class="cl pd-20">
+                <table class="table table-border table-bordered table-bg table-hover table-sort">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="14">信息列表</th>
+                        </tr>
+                        <tr class="text-c">
+                            <th width="80">学号</th>
+                            <th width="60">姓名</th>
+                            <th width="30">角色</th>
+                            <th width="40">头像</th>
+                            <th width="50">民族</th>
+                            <th width="50">政治面貌</th>
+                            <th width="100">联系电话</th>
+                            <th width="150">家庭住址</th>
+                            <th width="100">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name="list" id="vo"}
+                        <tr class="text-c">
+                            <td width="80">{$vo.studentId}</td>
+                            <td>{$vo.userName}</td>
+                            <td>学生</td>
+                            <td>
+                                {if condition="$vo.picture eq null"}
+                                <img style="width:25px;height:25px;" src="/uploads/system\dateNull.png">
+                                {else /}
+                                <img style="width:25px;height:25px;" src="{$vo.picture}">
+                                {/if}
+                            </td>
+                            <td>{$vo.nation}</td>
+                            <td>{$vo.polity}</td>
+                            <td>{$vo.contact}</td>
+                            <td>{$vo.address}</td>
+                            <td class="td-manage">
+                                <a style="text-decoration:none" href="javascript:;" title="详细" class="ml-5" onclick="stu_dtl('学生详细', '{:url("tchstumgr/stuDtl",["id"=>$vo["id"]])}','800','500')">
+                                <i class="Hui-iconfont">&#xe6df;</i>
+                                </a>
+                            </td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            </article>
+            <footer class="footer">
+                <p>感谢广西。。。。。。。。。。。。<br> Copyright &copy;2015 H-ui.admin v3.0 All Rights Reserved.<br> 本后台系统由<a href="http://www.h-ui.net/" target="_blank" title="H-ui前端框架">H-ui前端框架</a>提供前端技术支持</p>
+            </footer>
+        </div>
+    <!--</section>-->
+    {/block}
+
+    {block name="js"}
+    <script>
+        /*学生-详细*/
+        function stu_dtl(title, url, w, h) {
+            $.get(url);
+            layer_show(title, url, w, h);
+    }
+
+        $('.table-sort').dataTable({
+	    "aaSorting": [[ 0, "desc" ]],//默认第几个排序
+	    "bStateSave": true,//状态保存
+	    "aoColumnDefs": [
+	        //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	        {"orderable":false,"aTargets":[1,2,3,4,5,6,7,8]}// 制定列不参与排序
+	    ]
+        });
+    </script>
+    {/block}
+</body>
+</html>

@@ -1,0 +1,117 @@
+﻿<!--_menu 作为公共模版分离出去-->
+<aside class="Hui-aside">
+    <div class="menu_dropdown bk_2">
+        {if condition="$Think.session.user_info.role gt 1"}
+        <dl id="menu-admin-manage">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe62b;</i> 用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('admin/adminList')}" title="管理员列表">管理员列表</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('admin/teacherList')}" title="教师列表">教师列表</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('admin/studentList')}" title="学生列表">学生列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-admin-class">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe625;</i> 专业与班级<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('admajorgd/majorList')}" title="专业列表">专业列表</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('admajorgd/gradeList')}" title="班级列表">班级列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-admin-attend">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe63e;</i> 考勤管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adattend/attendList')}" title="考勤列表">考勤列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-admin-evaluation">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe6f3;</i> 综合测评<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adstusco/methodSet')}" title="计算设置">计算设置</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adstusco/adAward')}" title="学生奖惩">学生奖惩</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adstusco/postEval')}" title="保研测评">保研测评</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adstusco/evalYear')}" title="学生测评">学生测评</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adstusco/evalDateList')}" title="材料审核">材料审核</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-admin-stusco">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe61e;</i> 学生成绩<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('adstusco/stuscoList')}" title="成绩列表">成绩列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        {else /}
+        {if condition="$Think.session.user_info.role eq 0"}
+        <dl id="menu-stu-achv">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe72d;</i> 成绩管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('stuachvmgr/achvList')}" title="综合成绩单">综合成绩单</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-admin-alltest">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe626;</i> 综测与奖惩<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('stuachvmgr/evalList')}" title="综合测试">综合测试</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('stuachvmgr/stuEvalData')}" title="测评材料">奖惩信息</a></li>
+                </ul>
+            </dd>
+        </dl>
+        {else /}
+        {if condition="$Think.session.user_info.role eq 1"}
+        <dl id="menu-teacher-stumanage">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe62B;</i> 学生管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('Tchstumgr/stuInfoList')}" title="学生列表">学生列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-teacher-attendmgr">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe61a;</i> 考勤管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('tchattendmgr/attendList')}" title="考勤列表">考勤列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-teacher-stuachv">
+            <dt><i class="Hui-iconfont" style="color:dimgray">&#xe61e;</i> 学生成绩<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('tchstuachv/achvList')}" title="成绩列表">成绩列表</a></li>
+                    <li><a href="javascript:;" onclick="menuFile(this)" src="{:url('tchstuachv/evalList')}" title="综测列表">综测列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+        {else /}
+
+        {/if}
+        {/if}
+        {/if}
+
+
+
+
+    </div>
+</aside>
+
+{block name="js"}
+
+
+
+{/block}
+
+<!--<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>-->
+<!--/_menu 作为公共模版分离出去-->

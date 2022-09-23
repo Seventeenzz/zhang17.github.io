@@ -1,0 +1,86 @@
+﻿{extend name='public/base'/}
+
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<!--<section class="Hui-article-box">-->
+    <nav class="breadcrumb">
+        <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+        <span class="c-gray en">&gt;</span>
+        个人信息
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered radius" style="width:700px;">
+                <tbody>
+                    <tr class="text-c">
+                        <td rowspan="20" style="width:160px;height:160px; vertical-align:top">
+                            {if condition="$user_info.picture eq null"}
+                            <img class="radius border" style="width:240px;height:320px;" src="/uploads/system\dateNull.png">
+                            {else /}
+                            <img class="radius border" style="width:240px;height:320px;" src="{$user_info.picture}">
+                            {/if}
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="active">性别</th>
+                        <td colspan="2">{$user_info.gender=='0' ? '男' :'女'}</td>
+                    </tr>
+                    <tr><th class="active">姓名</th><td>{$user_info.userName}</td></tr>
+                    <tr><th class="active">学号</th><td>{$user_info.studentId}</td></tr>
+                    <tr><th class="active">民族</th><td>{$user_info.nation}</td></tr>
+                    <tr><th class="active">籍贯</th><td>{$user_info.birthPlace}</td></tr>
+
+                    <tr><th class="active" style="width:60px;">政治面貌</th><td colspan="4">{$user_info.polity}</td></tr>
+                    <tr><th class="active">专业</th><td colspan="4">{$user_info.mid}</td></tr>
+                    <tr><th class="active">身份证号</th><td colspan="4">{$user_info.identity}</td></tr>
+                    <tr><th class="active">联系电话</th><td colspan="4">{$user_info.contact}</td></tr>
+                    <tr><th class="active">家庭住址</th><td colspan="4">{$user_info.address}</td></tr>
+                    <tr><th class="active">email</th><td colspan="4">{$user_info.email}</td></tr>
+
+
+                    <tr class="text-c">
+                        <th colspan="6">
+                            <input class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;修改&nbsp;&nbsp;" id="submit" onclick="personal_edit('个人信息', '{:url("index/studentEdit")}','900','700')">
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+        <footer class="footer">
+            <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+        </footer>
+    </div>
+<!--</section>-->
+<article class="cl pd-15">
+    
+
+</article>
+    {/block}
+
+
+
+
+    {block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+<script type="text/javascript">
+
+    /*学生-修改*/
+    function personal_edit(title, url, w, h) {
+        $.get(url);
+        layer_show(title, url, w, h);
+    }
+</script>
+
+    {/block}
+</body>
+</html>

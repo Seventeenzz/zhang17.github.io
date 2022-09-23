@@ -1,0 +1,158 @@
+﻿{include file='public/meta' /}
+</head>
+<body>
+    {block name="content"}
+    <!--<section class="Hui-article-box">-->
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont" style="margin-left:20px;">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+            <span class="c-gray en">&gt;</span>
+            用户管理
+            <span class="c-gray en">&gt;</span>
+            教师列表 <a class="btn btn-success radius r" style="margin-right:20px;line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+        </nav>
+
+        <div class="Hui-article">
+            <article class="cl pd-20">
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        <a href="javascript:;" class="btn btn-primary radius" onclick="teacher_add('添加教师', '{:url("admin/teacherAdd")}','800','500')">
+                            <i class="Hui-iconfont">&#xe600;</i> 添加教师
+                        </a>
+                    </span>
+                    <span class="r">共有数据：<strong>{$count}</strong>条</span>
+                </div>
+                <table class="table table-border table-bordered table-bg table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="14">信息列表</th>
+                        </tr>
+                        <tr class="text-c">
+                            <th width="20" hidden="hidden">ID</th>
+                            <th width="20">ID</th>
+                            <th width="80">工号</th>
+                            <th width="60">姓名</th>
+                            <th width="60">角色</th>
+                            <th width="60">职务</th>
+                            <th width="100">邮箱</th>
+                            <th width="100">联系电话</th>
+                            <th width="180">管理班级</th>
+                            <th width="80">是否已启用</th>
+                            <th width="100">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name="list" id="vo"}
+                        <tr class="text-c">
+                            <td hidden="hidden">{$vo.id}</td>
+                            <td>{$i}</td>
+                            <td>{$vo.teacherId}</td>
+                            <td>{$vo.userName}</td>
+                            <td>教师</td>
+                            <td>{$vo.job}</td>
+                            <td>{$vo.email}</td>
+                            <td>{$vo.contact}</td>
+                            <td>
+                                {if condition="$vo.cid eq null"}
+                                -
+                                {else /}
+                                {$vo.cid}
+                                {/if}
+
+                            </td>
+                            <td class="td-status">
+                                {if condition="$vo.status eq 1"}
+                                <span class="label label-success radius">已启用</span>
+                                {else /}
+                                <span class="label-default radius">已禁用</span>
+                                {/if}
+                            </td>
+
+                            <td class="td-manage">
+                                {if condition="$vo.status eq 1"}
+                                <a style="text-decoration:none" onclick="teacher_stop(this,{$vo.id})" href="javascript:;" title="停用">
+                                    <i class="Hui-iconfont">&#xe631;</i>
+                                </a>
+                                {else /}
+                                <a style="text-decoration:none" onclick="teacher_start(this,{$vo.id})" href="javascript:;" title="启用">
+                                    <i class="Hui-iconfont">&#xe615;</i>
+                                </a>
+                                {/if}
+
+                                <a style="text-decoration:none" href="javascript:;" title="编辑" class="ml-5" onclick="teacher_edit('教师编辑', '{:url("admin/teacherEdit",["id"=>$vo["id"]])}','800','500')">
+                                <i class="Hui-iconfont">&#xe6df;</i>
+                                </a>
+
+                                <a style="text-decoration:none" class="ml-5" href="javascript:;" title="删除" onclick="teacher_del(this, {$vo.id})">
+                                    <i class="Hui-iconfont">&#xe6e2;</i>
+                                </a>
+
+                            </td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            </article>
+            <footer class="footer">
+                <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+            </footer>
+        </div>
+    <!--</section>-->
+    {/block}
+
+    {block name="js"}
+    {include file='public/footer' /}
+    <script>
+
+        /*教师-停用*/
+        function teacher_stop(obj,id) {
+            layer.confirm('确认要停用吗？', function (index) {
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.get("{:url('admin/setStatus')}", { role:1,id: id });
+                $(obj).parents("tr").find(".td-manage").prepend('<a onClick="teacher_start(this,role,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+                $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
+                $(obj).remove();
+                layer.msg('已停用!', { icon: 5, time: 1000 });
+                 window.location.reload(); 
+            });
+        }
+
+        /*教师-启用*/
+        function teacher_start(obj,id) {
+            layer.confirm('确认要启用吗？', function (index) {
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.get("{:url('admin/setStatus')}",  { role:1,id: id });
+                $(obj).parents("tr").find(".td-manage").prepend('<a onClick="teacher_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+                $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+                $(obj).remove();
+                layer.msg('已启用!', { icon: 6, time: 1000 });
+                 window.location.reload(); 
+            });
+        }
+
+        /*教师-编辑*/
+        function teacher_edit(title, url, w, h) {
+            $.get(url);
+            layer_show(title, url, w, h);
+            }
+
+        /*教师-添加*/
+        function teacher_add(title, url, w, h) {
+            $.get(url);
+            layer_show(title, url, w, h);
+            }
+    
+        /*教师-删除*/
+        function teacher_del(obj, id) {
+            layer.confirm('确认删除吗？', function (index) {
+                $.get("{:url('admin/deleteTeacherUser')}", { id: id });
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!', { icon: 1, time: 1000 });
+            });
+            }
+
+
+    </script>
+    {/block}
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

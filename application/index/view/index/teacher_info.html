@@ -1,0 +1,103 @@
+﻿{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<article class="cl pd-20">
+
+    <form action="" method="post" class="form form-horizontal" id="form-tch-change">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">工号：</label>
+            <div class="formControls col-xs-3 col-sm-2"style="margin-top:2px;">{$user_info['teacherId']}
+            </div>
+            <label class="form-label col-xs-3 col-sm-2">姓名：</label>
+            <div class="formControls col-xs-4 col-sm-3" style="margin-top:2px;">{$user_info['userName']}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">角色：</label>
+            <div class="formControls col-xs-3 col-sm-2"style="margin-top:2px;">教师
+            </div>
+            <label class="form-label col-xs-3 col-sm-2">状态：</label>
+            <div class="formControls col-xs-4 col-sm-3"style="margin-top:2px;">启用
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">职务：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info['job']}" name="work">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">管理班级：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info['cid']}">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">email：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="email" class="input-text" value="{$user_info['email']}" name="em">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">手机号码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$user_info['contact']}" name="ct">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius disabled" type="button" value="&nbsp;&nbsp;修改提交&nbsp;&nbsp;" id="submit">
+            </div>
+        </div>
+    </form>
+
+
+</article>
+    {/block}
+
+
+
+
+    {block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+     $(function () {
+
+        //防止用户无更新提交,只有表中数据有变化时才允许提交
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+
+        $("#submit").on("click", function (event) {
+            $.ajax({
+                type: "POST",
+                url: "{:url('Index/changeTchInfo')}",
+                data: $("#form-tch-change").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+
+                    }
+                      parent.window.location.reload(); 
+                }
+            });
+
+        })
+    })
+  
+</script>
+    {/block}
+</body>
+</html>

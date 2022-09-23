@@ -1,0 +1,109 @@
+﻿{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+    {/block}
+    {block name="content"}
+    <!--<section class="Hui-article-box">-->
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+            <span class="c-gray en">&gt;</span>
+            成绩管理
+            <span class="c-gray en">&gt;</span>
+            综合成绩单 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+        </nav>
+
+        <div class="Hui-article">
+
+            <article class="cl pd-20">
+                <div class="panel panel-primary radius">
+                    <div class="panel-header">&nbsp;&nbsp;&nbsp;&nbsp;课程成绩-学生：{$name}</div>
+                    <div class="panel-body">
+                        <table class="table table-border table-bordered table-bg table-striped table-sort radius">
+                            <thead>
+                                <tr class="text-c">
+                                    <th width="80">年度</th>
+                                    <th width="50">学期</th>
+                                    <th width="80">课程代码</th>
+                                    <th width="150">课程名称</th>
+                                    <th width="50">成绩</th>
+                                    <th width="50">学分</th>
+                                    <th width="50">绩点</th>
+                                    <th width="100">课程平台</th>
+                                    <th width="80">课程性质</th>
+                                    <th width="80">考核方式</th>
+                                    <th width="80">考试状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name="list" id="vo"}
+                                <tr class="text-c">
+                                    <td>{$vo.courseYear}</td>
+                                    <td>
+                                        {if condition="$vo.term eq 1"}
+                                        秋季
+                                        {else /}
+                                        春季
+                                        {/if}
+                                    </td>
+                                    <td>{$vo.courseNum}</td>
+                                    <td>{$vo.courseName}</td>
+                                    <td>{$vo.examSco}</td>
+                                    <td>{$vo.credit}</td>
+                                    <td>{$vo.coursePoint}</td>
+                                    <td>{$vo.coursePlat}</td>
+                                    <td>{$vo.coursePro}</td>
+                                    <td>
+                                        {if condition="$vo.assess eq 1"}
+                                        考试
+                                        {else /}
+                                        考查
+                                        {/if}
+                                    </td>
+                                    <td class="td-status">
+                                        {if condition="$vo.status eq 0"}
+                                        <span class="label label-success radius">正常</span>
+                                        {else /}
+                                        <span class="label-default radius">旷考</span>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/volist}
+                            </tbody>
+                        </table>
+                        <div class="cl bg-1 bk-gray mt-8 radius">
+
+                        </div>
+
+                    </div>
+                </div>
+                
+            </article>
+            <footer class="footer">
+                <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+            </footer>
+        </div>
+    <!--</section>-->
+    {/block}
+
+    {block name="js"}
+    <script>
+
+        $('.table-sort').dataTable({
+            "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+            "bStateSave": true,//状态保存
+            "aoColumnDefs": [
+                //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+                {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+            ]
+        });
+
+    </script>
+    {/block}
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

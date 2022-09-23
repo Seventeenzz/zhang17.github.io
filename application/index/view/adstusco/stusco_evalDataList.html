@@ -1,0 +1,121 @@
+{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+{/block}
+{block name="content"}
+<!--<section class="Hui-article-box">-->
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    综合测评
+    <span class="c-gray en">&gt;</span>
+    学生奖惩 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+
+<div class="Hui-article">
+
+    <article class="cl pd-20">
+        <div class="panel panel-primary radius">
+            <div class="panel-header">奖惩列表</div>
+            <div class="panel-body">
+                <table class="table table-border table-bordered table-bg table-striped radius">
+                    <thead>
+                    <tr class="text-c">
+                        <th width="80" hidden="hidden">ID</th>
+                        <th width="80">ID</th>
+                        <th width="200">学号</th>
+                        <th width="80">姓名</th>
+                        <th width="250">奖项名称</th>
+                        <th width="250">奖项证明</th>
+                        <th width="250">奖项类型</th>
+                        <th width="250">年份</th>
+                        <th width="250">状态</th>
+                        <th width="250">分</th>
+                        <th width="100">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="evalDataList" id="eval"}
+                    <tr class="text-c">
+                        <td hidden="hidden">{$eval.id}</td>
+                        <td>{$i}</td>
+                        <td>{$eval.studentId}</td>
+                        <td>{$eval.userName}</td>
+                        <td>{$eval.evalName}</td>
+                        <td>
+                            {if condition="$eval.evalProve eq null"}
+                            <img style="width:48px;height:48px;" src="/uploads/system\dateNull.png">
+                            {else /}
+                            <img style="width:48px;height:48px;" src="{$eval.evalProve}" onclick="checkPic('查看证明', '{:url("adstusco/checkPic",["id"=>$eval["id"]])}','800','800')")">
+                            {/if}
+                        </td>
+                        <td>{$eval.evalType}</td>
+                        <td>{$eval.evalYear}</td>
+                        <td>
+                            {switch name="$eval.status"}
+                            {case value="0"}通过{/case}
+                            {case value="1"}待审核{/case}
+                            {case value="2"}不通过{/case}
+                            {default /}default
+                            {/switch}
+                        </td>
+                        <td>
+                            {if ($eval.status gt 0)}
+                            null
+                            {else /}{$eval.score}
+                            {/if}
+                        </td>
+                        <td>
+                            <a style="text-decoration:none" href="javascript:;" title="编辑" class="ml-5" onclick="award_edit('审核', '{:url("adstusco/evalCheck",["id"=>$eval["id"]])}','800','800')">
+                            <i class="Hui-iconfont">&#xe6df;</i>
+                            </a>
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </article>
+
+    <footer class="footer">
+        <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+    </footer>
+</div>
+<!--</section>-->
+{/block}
+
+{block name="js"}
+<script>
+
+    /*查看图片*/
+    function checkPic(title, url, w, h) {
+        $.get(url);
+        layer_show(title, url, w, h);
+    }
+    /*学生-编辑*/
+    function award_edit(title, url, w, h) {
+        $.get(url);
+        layer_show(title, url, w, h);
+    }
+
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+        ]
+    });
+
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

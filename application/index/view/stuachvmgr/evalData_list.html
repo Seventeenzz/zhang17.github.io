@@ -1,0 +1,227 @@
+{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+{/block}
+{block name="content"}
+<!--<section class="Hui-article-box">-->
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+    <span class="c-gray en">&gt;</span>
+    综测与奖惩
+    <span class="c-gray en">&gt;</span>
+    奖惩信息 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+
+<div class="Hui-article">
+
+    <article class="cl pd-20">
+        <div class="panel panel-primary radius">
+            <div class="panel-header">资料列表</div>
+            <div class="panel-body">
+                <table class="table table-border table-bordered table-bg table-striped radius">
+                    <thead>
+                    <tr>
+                        <th scope="col" colspan="17">&nbsp;&nbsp;&nbsp;&nbsp;姓名：{$name}&nbsp;&nbsp;&nbsp;&nbsp;学号：{$studentId}</th>
+                    </tr>
+                    <tr class="text-c">
+                        <th width="80" hidden="hidden">ID</th>
+                        <th width="80">ID</th>
+                        <th width="250">奖项名称</th>
+                        <th width="250">奖项证明</th>
+                        <th width="250">奖项类型</th>
+                        <th width="250">学年</th>
+                        <th width="250">状态</th>
+                        <th width="250">分</th>
+                        <th width="100">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="evalList" id="eval"}
+                    <tr class="text-c">
+                        <td>{$i}</td>
+                        <td>{$eval.evalName}</td>
+                        <td>
+                            {if condition="$eval.evalProve eq null"}
+                            <img style="width:48px;height:48px;" src="/uploads/system\dateNull.png">
+                            {else /}
+                            <img style="width:48px;height:48px;" src="{$eval.evalProve}" onclick="checkPic('查看证明', '{:url("stuachvmgr/checkPic",["id"=>$eval["id"]])}','800','800')")">
+                            {/if}
+                        </td>
+                        <td>
+                            {switch name="$eval.evalType"}
+                                {case value="CX"}操行综合项{/case}
+                                {case value="ZY"}职业技能综合项{/case}
+                                {case value="TY"}体艺综合项{/case}
+                                {default /}default
+                            {/switch}
+                        </td>
+                        <td>{$eval.evalYear}</td>
+                        <td>
+                            {switch name="$eval.status"}
+                            {case value="0"}通过{/case}
+                            {case value="1"}待审核{/case}
+                            {case value="2"}不通过{/case}
+                            {default /}default
+                            {/switch}
+                        </td>
+                        <td>
+                            {if ($eval.status gt 0)}
+                            null
+                            {else /}{$eval.score}
+                            {/if}
+                        </td>
+                        <td>
+                            {if ($eval.status gt 0)}
+                            <a style="text-decoration:none" href="javascript:;" title="编辑" class="ml-5">
+                                <i class="Hui-iconfont">&#xe6df;</i>
+                            </a>
+                            {else /}无
+                            {/if}
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </article>
+
+    <!--<hr style="height: 2px;border: none;border-top: 1px dashed black;">-->
+
+    <article class="cl pd-20">
+        <div class="panel panel-primary radius">
+            <div class="panel-header">奖项申请</div>
+            <div class="panel-body">
+                <form action="" method="post" class="form form-horizontal" id="form-eval-add" enctype="multipart/form-data">
+                    <input type="text" hidden="hidden" name="evalStu" id="evalStu" value="{$studentId}">
+                    <input type="text" hidden="hidden" name="evalUser" id="evalUser" value="{$name}">
+                    <table class="table table-border table-bordered table-bg table-striped radius">
+                        <thead>
+                        <tr class="text-c">
+                            <th width="250">材料名称</th>
+                            <th width="250">材料证明</th>
+                            <th width="250">材料类型</th>
+                            <th width="250">材料学年</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-c">
+                            <td>
+                                <input type="text" class="input-text" value="" id="evalName" name="evalName">
+                            </td>
+                            <td width="250">
+                                <div class="row cl" style="margin: 0 auto;">
+                                    <div class="formControls">
+                                        <img id="backimg" style="width:60px;height:80px;" src="">
+                                        <br>
+                                        <br>
+                                        <span class="btn-upload">
+                                            <a href="javascript:void();" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 浏览照片</a>
+                                            <input type="file" multiple class="input-file" id="evalPic" name="evalPic" onchange="reads(this)">
+                                        </span>
+                                        <h6>上传说明：上传图像要为jpg格式，大小不得超过2MB。</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="select-box" style="width:100%;">
+                                    <select class="select" name="evalType" size="1">
+                                        <option value="CX" selected>操行综合</option>
+                                        <option value="ZY">职业技能综合</option>
+                                        <option value="TY">体艺综合</option>
+                                    </select>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="select-box" style="width:100%;">
+                                    <select class="select" name="evalYear" size="1">
+                                        {volist name="evalYear" id="years"}
+                                        <option value="{$years}">{$years}</option>
+                                        {/volist}
+                                    </select>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row cl">
+                        <div class="col-sm-offset-1">
+                            <input class="btn btn-primary radius disabled" type="button" value="&nbsp;&nbsp;上传&nbsp;&nbsp;" id="submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </article>
+    <footer class="footer">
+        <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+    </footer>
+</div>
+<!--</section>-->
+{/block}
+
+{block name="js"}
+<script>
+
+    /*查看图片*/
+    function checkPic(title, url, w, h) {
+        $.get(url);
+        layer_show(title, url, w, h);
+    }
+
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+        ]
+    });
+
+    $(function () {
+
+        $("form").children().change(function () {
+            $("#submit").removeClass('disabled');
+        });
+
+        $("#submit").on("click", function (event) {
+            var formdata=new FormData($("#form-eval-add")[0]);
+            $.ajax({
+                type: "POST",
+                url: "{:url('stuachvmgr/uploadEval')}",
+                data: formdata,// $("#form-student-edit").serialize(),
+                async : false,
+                cache : false,
+                contentType : false,
+                processData : false,
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                    }else{
+                        alert(data.message);
+                    }
+                    window.location.reload();
+                }
+            });
+        })
+    });
+
+    function reads(obj) {
+        var file = obj.files[0];
+        var reader = new  FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (ev) {
+            $("#backimg").attr("src", ev.target.result);
+        }
+    }
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

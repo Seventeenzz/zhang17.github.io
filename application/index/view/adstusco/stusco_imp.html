@@ -1,0 +1,92 @@
+﻿{extend name='public/base'/}
+{block name='header'}{/block} {//关掉头部}
+{block name='menu'}{/block} {//关掉菜单}
+{block name='seo'}
+<title>{$title|default="标题"}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+{/block}
+    {block name="content"}
+<article class="cl pd-20">
+    <div class="panel panel-primary radius">
+        <div class="panel-header">导入成绩单</div>
+        <div class="panel-body">
+            <form action="{:url('adstusco/excelStuAchv')}" enctype="multipart/form-data" method="post" class="form form-horizontal" id="form-excel-add">
+                <table class="table table-border table-bordered table-bg">
+                    <thead>
+                        <tr>
+                            <th colspan="16" scope="col">
+                                <span class="l">
+                                    表格示例：
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>课程号</th>
+                            <th>课程名称</th>
+                            <th>课程平台</th>
+                            <th>课程性质</th>
+                            <th>学年</th>
+                            <th>学期</th>
+                            <th>考核</th>
+                            <th>成绩</th>
+                            <th>学分</th>
+                            <th>绩点</th>
+                            <th>状态</th>
+                            <th>正常成绩</th>
+                            <th>补考成绩</th>
+                            <th>重修成绩</th>
+                        </tr>
+                        <tr>
+                            <th>201512700139</th>
+                            <th>吴波</th>
+                            <th>15001111</th>
+                            <th>思想道德修养与法律</th>
+                            <th>T通识素质教育</th>
+                            <th>B必修</th>
+                            <th>2017-2018</th>
+                            <th>春季</th>
+                            <th>考察</th>
+                            <th>80.0</th>
+                            <th>0.5</th>
+                            <th>3.0</th>
+                            <th>正常</th>
+                            <th>80.0</th>
+                            <th>0.0</th>
+                            <th>0.0</th>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="cl pd-5 mt-20">
+                    <span class="l">
+                        <span class="btn-upload form-group">
+                            <input class="input-text upload-url radius" type="text" name="uploadfile-1" id="uploadfile-1" readonly><a href="javascript:void();" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+                            <input type="file" multiple name="excel" class="input-file">
+                        </span>
+                    </span>
+                    <span class="r">
+                        <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="submit">
+                    </span>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    
+</article>
+    {/block}
+
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

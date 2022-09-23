@@ -1,0 +1,45 @@
+{include file='public/meta' /}
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+</head>
+<body>
+    {/block}
+
+    {block name='header'}
+    {include file='public/header' /}
+    {/block}
+
+    {block name='menu'}
+    {include file='public/menu' /}
+    {/block}
+
+
+    {block name="content"}
+    <section class="Hui-article-box" id="main">
+
+
+        <iframe src="{:url('index/welcome')}" style="width: 100%; height: 100%" frameborder="0" scrolling="0"></iframe>
+
+    </section>
+    
+    {/block}
+
+    {block name="js"}
+    {include file='public/footer' /}
+    <script>
+
+        function menuFile(obj) {
+            //获取url
+            var src = $(obj).attr('src');
+            //设置iframe的src
+            $('iframe').attr('src', src);
+        }
+    </script>
+
+
+    {/block}
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

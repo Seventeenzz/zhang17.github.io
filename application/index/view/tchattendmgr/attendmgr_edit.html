@@ -1,0 +1,105 @@
+﻿{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+    {/block}
+    {block name="content"}
+    <!--<section class="Hui-article-box">-->
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+            <span class="c-gray en">&gt;</span>
+            考勤管理
+            <span class="c-gray en">&gt;</span>
+            考勤列表
+            <span class="c-gray en">&gt;</span>
+            {$classInfo}
+
+            <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px; margin-left:10px;" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+            <a href="{:url('tchattendmgr/attendList')}" class="btn btn-secondary radius r" style="line-height:1.6em;margin-top:3px; margin-left:10px;">
+                <i class="Hui-iconfont">&#xe6d4;</i>返回上一级
+            </a>
+        </nav>
+        <div class="Hui-article">
+            <article class="cl pd-20">
+                    <table class="table table-border table-bordered table-bg table-striped table-sort">
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="9">信息列表</th>
+                            </tr>
+                            <tr class="text-c">
+                                <th width="30">学号</th>
+                                <th width="40">姓名</th>
+                                <th width="40">日期</th>
+                                <th width="40">课程名称</th>
+                                <th width="60">状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist name="list" id="vo"}
+                            <tr class="text-c">
+                                <td>{$vo.studentId}</td>
+                                <td>{$vo.userName}</td>
+                                <td>{:date("Y-m-d", $vo.date)}</td>
+                                <td>{$vo.courseName}</td>
+                                <td class="td-status">
+                                    {if condition="$vo.status eq 0"}
+                                    <span class="label label-default radius">缺勤</span>
+                                    {else /}
+                                    <span class="label label-success radius">正常</span>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+            </article>
+            <footer class="footer"></footer>
+        </div>
+    <!--</section>-->
+    {/block}
+
+    {block name="js"}
+    <script>
+
+
+    $(function () {
+        $("#search").on("click", function (event) {
+            $.ajax({
+                type: "POST",
+                url: "{:url('adattend/searchInfo')}",
+                data: $("#form-search").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        alert("OK");
+                    } else {
+                        alert(data.message);
+
+                    }
+                      parent.window.location.reload(); 
+                }
+            });
+
+        })
+
+    })
+    $('.table-sort').dataTable({
+	    "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+	    "bStateSave": true,//状态保存
+	    "aoColumnDefs": [
+	        //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	        {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+	    ]
+        });
+
+
+
+    </script>
+    {/block}
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

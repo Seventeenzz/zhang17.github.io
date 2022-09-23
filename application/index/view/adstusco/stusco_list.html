@@ -1,0 +1,134 @@
+﻿{extend name="public/base" /}
+
+{block name="seo"}
+<title>{$title|default='PHP'}</title>
+<meta name="keywords" content="{$keywords|default='关键字'}">
+<meta name="description" content="{$desc|default='描述'}">
+</head>
+<body>
+    {/block}
+    {block name="content"}
+    <!--<section class="Hui-article-box">-->
+        <nav class="breadcrumb">
+            <i class="Hui-iconfont">&#xe67f;</i>  <a href="{:url('index/welcome')}" class="maincolor">首页</a>
+            <span class="c-gray en">&gt;</span>
+            学生成绩
+            <span class="c-gray en">&gt;</span>
+            成绩列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+        </nav>
+
+        <div class="Hui-article">
+            <article class="cl pd-20">
+                <div class="cl pd-5 bg-1 bk-gray mt-20" style="margin-bottom:10px;">
+                    <span class="l">
+                        <a href="javascript:;" class="btn btn-primary radius" onclick="imp_achv('导入成绩单', '{:url("Adstusco/achvImp")}','1200','500')">
+                        <i class="Hui-iconfont">&#xe600;</i> 导入成绩单
+                        </a>
+                    </span>
+                </div>
+
+                <table class="table table-border table-bordered table-bg table-striped table-sort radius">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="17">信息列表</th>
+                        </tr>
+                        <tr class="text-c">
+                            <th width="180">学号</th>
+                            <th width="80">姓名</th>
+                            <th width="120">课程号</th>
+                            <th width="250">课程名称</th>
+                            <th width="200">课程平台</th>
+                            <th width="100">课程性质</th>
+                            <th width="80">学年</th>
+                            <th width="40">学期</th>
+                            <th width="40">考核</th>
+                            <th width="40">成绩</th>
+                            <th width="40">学分</th>
+                            <th width="40">绩点</th>
+                            <th width="40">状态</th>
+                            <th width="80">正常成绩</th>
+                            <th width="80">补考成绩</th>
+                            <th width="80">重修成绩</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name="list" id="vo"}
+                        <tr class="text-c">
+                            <td>{$vo.studentId}</td>
+                            <td>{$vo.userName}</td>
+                            <td>{$vo.courseNum}</td>
+                            <td>{$vo.courseName}</td>
+                            <td>
+                                {switch name="$vo.coursePlat"}
+                                    {case value="Z"}Z专业拓展教育{/case}
+                                    {case value="T"}T通识素质教育{/case}
+                                    {case value="K"}K学科专业教育{/case}
+                                    {case value="S"}S实践教学环节{/case}
+                                    {default /}default
+                                {/switch}
+                            </td>
+                            <td>{$vo.coursePro == 'B' ? 'B必修' : 'X选修'}</td>
+                            <td>{$vo.courseYear}</td>
+                            <td>
+                                {if condition="$vo.term eq 1"}
+                                秋季
+                                {else /}
+                                春季
+                                {/if}
+                            </td>
+                            <td>
+                                {if condition="$vo.assess eq 1"}
+                                考试
+                                {else /}
+                                考察
+                                {/if}
+                            </td>
+                            <td>{$vo.examSco}</td>
+                            <td>{$vo.credit}</td>
+                            <td>{$vo.coursePoint}</td>
+                            <td class="td-status">
+                                {if condition="$vo.status eq 0"}
+                                <span class="label label-success radius">正常</span>
+                                {else /}
+                                <span class="label-default radius">旷考</span>
+                                {/if}
+                            </td>
+                            <td>{$vo.ordSco}</td>
+                            <td>{$vo.makeupSco}</td>
+                            <td>{$vo.restudySco}</td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            </article>
+            <footer class="footer">
+                <p>本系统由广西师范大学电子工程学院进行开发维护</p>
+            </footer>
+        </div>
+    <!--</section>-->
+    {/block}
+
+    {block name="js"}
+    <script>
+
+        /*管理员-导入*/
+        function imp_achv(title, url, w, h) {
+            $.get(url);
+            layer_show(title, url, w, h);
+        }
+
+
+        $('.table-sort').dataTable({
+	    "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+	    "bStateSave": true,//状态保存
+	    "aoColumnDefs": [
+	        //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	        {"orderable":false,"aTargets":[0,4]}// 制定列不参与排序
+	    ]
+        });
+
+    </script>
+    {/block}
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
